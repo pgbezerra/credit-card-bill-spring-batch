@@ -27,7 +27,7 @@ public class TransacaoReaderConfig {
 		sql.append(" FROM ");
 		sql.append("   transacao T ");
 		sql.append(" JOIN ");
-		sql.append("   carta_credito ");
+		sql.append("   cartao_credito ");
 		sql.append("   USING ");
 		sql.append("     (numero_cartao_credito) ");
 		sql.append(" ORDER BY ");

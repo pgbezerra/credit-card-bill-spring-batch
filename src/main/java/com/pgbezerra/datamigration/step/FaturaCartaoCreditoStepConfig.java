@@ -6,11 +6,14 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemStreamReader;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.pgbezerra.datamigration.model.Fatura;
 import com.pgbezerra.datamigration.model.Transacao;
 import com.pgbezerra.datamigration.reader.FaturaCartaoCreditoReader;
+import com.pgbezerra.datamigration.writer.TotalTransacoesCallBack;
 
 @Configuration
 public class FaturaCartaoCreditoStepConfig {
@@ -21,15 +24,18 @@ public class FaturaCartaoCreditoStepConfig {
 		this.stepBuilderFactory = stepBuilderFactory;
 	}
 
+	@Bean
 	public Step faturaCartaoCreditoStep(ItemStreamReader<Transacao> faturaItemReader,
 			ItemProcessor<Fatura, Fatura> faturaItemProcessor,
-			ItemWriter<Fatura> faturaItemWriter) {
+			@Qualifier("arquivosFaturaCartaoCredito") ItemWriter<Fatura> faturaItemWriter,
+			TotalTransacoesCallBack listener) {
 		return stepBuilderFactory
 				.get("faturaCartaoCreditoStep")
 				.<Fatura, Fatura>chunk(1)
 				.reader(new FaturaCartaoCreditoReader(faturaItemReader))
 				.processor(faturaItemProcessor)
 				.writer(faturaItemWriter)
+				.listener(listener)
 				.build();
 	}
 	

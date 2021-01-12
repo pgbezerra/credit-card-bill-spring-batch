@@ -18,5 +18,9 @@ public class Fatura implements Serializable {
 	private Cliente cliente;
 	private CartaoDeCredito cartaoDeCredito;
 	private final List<Transacao> transacoes = new ArrayList<>();
+	
+	public Double getTotal() {
+		return transacoes.stream().mapToDouble(Transacao::getValor).reduce(0, Double::sum);
+	}
 
 }
